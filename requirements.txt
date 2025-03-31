@@ -1,0 +1,6 @@
+opencv-python
+mysql-connector-python
+ultralytics
+paddleocr
+imutils
+python-dotenv

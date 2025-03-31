@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ANPR Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css' ) }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>ANPR Logging Dashboard</h1>
+        <div class="header-buttons">
+          <button id="darkModeToggle" class="icon-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+          </button>
+          <button id="whitelistButton" class="primary-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="M12 5v14" />
+            </svg>
+            Whitelist
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="table-container">
+          <table id="anprTable">
+            <thead>
+              <tr>
+                <th>Sr No.</th>
+                <th>Plate No.</th>
+                <th>Type</th>
+                <th>Confidence Score</th>
+                <th>Image</th>
+                <th>Date/Time</th>
+                <th>Vehicle Info</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <h2>Whitelisted Vehicles</h2>
+        <section class="whitelist-section">
+          <table id="whitelistTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Plate No.</th>
+                <th>Type</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </main>
+
+      <!-- Whitelist Form Modal -->
+      <div id="whitelistModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Add to Whitelist</h2>
+            <button class="close-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+          <form id="whitelistForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" required />
+            </div>
+            <div class="form-group">
+              <label for="plateNo">Plate Number</label>
+              <input type="text" id="plateNo" required />
+            </div>
+            <div class="form-group">
+              <label for="type">Vehicle Type</label>
+              <select id="type" required>
+                <option value="" disabled selected>Select Vehicle Type</option>
+                <option value="2-wheeler">2-Wheeler</option>
+                <option value="3-wheeler">3-Wheeler</option>
+                <option value="LMV">LMV</option>
+                <option value="HMV">HMV</option>
+              </select>
+            </div>
+            <button type="submit" class="primary-button">Add to Whitelist</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Confirmation Dialog -->
+      <div id="confirmDialog" class="modal">
+        <div class="modal-content">
+          <p>Are you sure you want to remove this vehicle from the whitelist?</p>
+          <div class="dialog-buttons">
+            <button id="cancelButton" class="secondary-button">Cancel</button>
+            <button id="confirmButton" class="danger-button">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Overlay -->
+    <div id="imageOverlay" class="image-overlay">
+      <div class="enlarged-image-container">
+        <img id="enlargedImage" class="enlarged-image" src="" alt="Enlarged view" />
+        <button class="close-image-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M18 6 6 18" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <path d="M6 6 18 18" stroke="white" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
+  </body>
+</html>
