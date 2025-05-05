@@ -15,7 +15,7 @@ def get_db_connection():
         conn = mysql.connector.connect(
             host='localhost',
             user='root',
-            password=os.getenv("password"),
+            password='priyanshu',
             database='vehicle_tracking'
         )
         return conn
@@ -108,6 +108,19 @@ def get_whitelist():
     
     return jsonify({"error": "Database connection failed"}), 500
 
+@app.route('/remove_from_whitelist/<int:id>', methods=['DELETE'])
+def remove_from_whitelist(id):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        query = "DELETE FROM whitelist_vehicles WHERE id = %s"
+        cursor.execute(query, (id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({"message": "Removed from whitelist"}), 200
+    
+    return jsonify({"error": "Database connection failed"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -102,11 +102,11 @@ function renderWhitelistTable() {
             <td>${entry.name}</td>
             <td>${entry.plateNo}</td>
             <td>${entry.type}</td>
+            <td><a href="https://www.carinfo.app/rc-details/${entry.plateNo}">Link</a></td>
             <td>
                 <button onclick="handleRemoveWhitelist(${entry.id})" class="icon-button text-red-600">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                 </button>
-            </td>
         </tr>
     `).join('');
 }
@@ -183,11 +183,24 @@ window.handleRemoveWhitelist = (id) => {
 
 confirmButton.addEventListener('click', () => {
     if (selectedEntry) {
-        whitelistEntries = whitelistEntries.filter(entry => entry.id !== selectedEntry.id);
-        renderWhitelistTable();
-        selectedEntry = null;
+        fetch(`/remove_from_whitelist/${selectedEntry.id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Remove from local array and re-render
+                whitelistEntries = whitelistEntries.filter(entry => entry.id !== selectedEntry.id);
+                renderWhitelistTable();
+                confirmDialog.classList.remove('active');
+                selectedEntry = null;
+            } else {
+                console.error('Error removing from whitelist:', data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
-    confirmDialog.classList.remove('active');
 });
 
 cancelButton.addEventListener('click', () => {

@@ -1,5 +1,4 @@
 from ultralytics import YOLO
-import cv2
 
 class PlateDetector:
     def __init__(self, model_path='models/best_license_float16.tflite'):
